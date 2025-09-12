@@ -1,0 +1,13 @@
+.env
+node_modules
+.DS_Store
+build
+dist
+yarn-error.log
+yarn-debug.log
+yarn.lock
+yarn.lock.nf
+npm-debug.log
+npm-debug.log.perf
+
+package-lock.json
