@@ -4,7 +4,7 @@ import passport from "passport";
 import helmet from "helmet";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
-import cookieParser from "cookie-parser"; // Import cookie-parser
+import cookieParser from "cookie-parser";
 import mainRouter from "./routes/index.js";
 import "./config/passport.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
@@ -26,16 +26,13 @@ const allowedOrigins = process.env.CORS_ORIGIN
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) === -1) {
-        const msg =
-          "The CORS policy for this site does not allow access from the specified Origin.";
-        return callback(new Error(msg), false);
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
       }
-      return callback(null, true);
     },
-    credentials: true, // Allow cookies to be sent
+    credentials: true,
   })
 );
 
@@ -44,10 +41,10 @@ app.use(cookieParser());
 
 // Rate Limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per window
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 app.use(limiter);
 
