@@ -22,10 +22,11 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, "Password is required"],
+      select: false, // Hide password by default
     },
     role: {
       type: String,
-      enum: ["USER", "SELLER"],
+      enum: ["USER", "SELLER", "ADMIN"],
       default: "USER",
     },
     avatar: {
@@ -39,6 +40,7 @@ const userSchema = new mongoose.Schema(
     },
     refreshToken: {
       type: String,
+      select: false,
     },
     googleId: {
       type: String,
@@ -49,15 +51,19 @@ const userSchema = new mongoose.Schema(
     },
     forgotPasswordCode: {
       type: String,
+      select: false,
     },
     forgotPasswordCodeExpiry: {
       type: Date,
+      select: false,
     },
     emailVerificationToken: {
       type: String,
+      select: false,
     },
     emailVerificationExpiry: {
       type: Date,
+      select: false,
     },
     orders: [
       {
@@ -65,6 +71,7 @@ const userSchema = new mongoose.Schema(
         ref: "Order",
       },
     ],
+    // User-specific fields
     wishlist: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -77,8 +84,44 @@ const userSchema = new mongoose.Schema(
         ref: "Product",
       },
     ],
+    // Seller-specific fields
+    companyName: {
+        type: String,
+    },
+    gst: {
+      type: String,
+    },
+    pan: {
+      type: String,
+    },
+    tin: {
+      type: String,
+    },
+    website: {
+      type: String,
+    },
+    aadhar: {
+      type: String,
+    },
+    products: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
+    // Admin-specific fields
+    users: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
-  { timestamps: true }
+  { 
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
 
 // Hash password before saving
@@ -117,6 +160,41 @@ userSchema.methods.generateRefreshToken = function () {
     { expiresIn: process.env.RT_EXPIRY }
   );
 };
+
+// Customize JSON output
+userSchema.methods.toJSON = function() {
+  const userObject = this.toObject();
+
+  // Remove sensitive fields
+  delete userObject.password;
+  delete userObject.refreshToken;
+  delete userObject.forgotPasswordCode;
+  delete userObject.forgotPasswordCodeExpiry;
+  delete userObject.emailVerificationToken;
+  delete userObject.emailVerificationExpiry;
+
+  // Remove role-specific fields
+  if (userObject.role !== 'ADMIN') {
+    delete userObject.users;
+  }
+
+  if (userObject.role !== 'SELLER') {
+    delete userObject.companyName;
+    delete userObject.gst;
+    delete userObject.pan;
+    delete userObject.tin;
+    delete userObject.website;
+    delete userObject.aadhar;
+    delete userObject.products;
+  }
+
+  if (userObject.role !== 'USER') {
+    delete userObject.wishlist;
+    delete userObject.cart;
+  }
+
+  return userObject;
+}
 
 const User = mongoose.model("User", userSchema);
 

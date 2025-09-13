@@ -11,7 +11,7 @@ import {
   updateAdminProfile,
   updateAdminAvatar,
   getCurrentAdmin,
-} from "../controllers/admin.controller.js";
+} from "./admin.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import authMiddleware from "../middlewares/auth.middleware.js";
 

@@ -12,7 +12,7 @@ import {
   updateSellerProfile,
   updateSellerAvatar,
   getCurrentSeller,
-} from "../controllers/seller.controller.js";
+} from "./seller.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import authMiddleware from "../middlewares/auth.middleware.js";
 

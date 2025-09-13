@@ -1,23 +1,23 @@
-import Admin from "../models/admin.model.js";
+import Seller from "./seller.model.js";
 import ApiError from "../utils/ApiErrors.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.fileuplaod.js";
 import jwt from "jsonwebtoken";
 
-const registerAdminService = async (req) => {
+const registerSellerService = async (req) => {
   const { username, email, password } = req.body;
 
   // Find if user already exists
-  const user = await Admin.findOne({ email });
+  const user = await Seller.findOne({ email });
   if (user) {
     throw new ApiError(400, "User already exists");
   }
   // find if username already exists
-  const usernameExists = await Admin.findOne({ username });
+  const usernameExists = await Seller.findOne({ username });
   if (usernameExists) {
     throw new ApiError(400, "Username already exists");
   }
 
-  const newUser = await Admin.create({ username, email, password });
+  const newUser = await Seller.create({ username, email, password });
   if (!newUser) {
     throw new ApiError(400, "Something went wrong while registering user");
   }
@@ -28,10 +28,10 @@ const registerAdminService = async (req) => {
   return newUser;
 };
 
-const loginAdminService = async (req) => {
+const loginSellerService = async (req) => {
   const { email, password } = req.body;
 
-  const user = await Admin.findOne({ email });
+  const user = await Seller.findOne({ email });
 
   if (!user) {
     throw new ApiError(400, "User not found");
@@ -49,7 +49,7 @@ const loginAdminService = async (req) => {
   }
 };
 
-const logoutAdminService = async (req) => {
+const logoutSellerService = async (req) => {
   const user = req.user;
   user.refreshToken = "";
   await user.save({ validateBeforeSave: false });
@@ -66,7 +66,7 @@ const refreshTokensCheck = async (incomingRefreshToken) => {
     );
 
     // 2. Find the user based on the decoded token's ID
-    const user = await Admin.findById(decodedToken?._id);
+    const user = await Seller.findById(decodedToken?._id);
 
     // 3. Validate the user and the refresh token
     if (!user || incomingRefreshToken !== user.refreshToken) {
@@ -90,12 +90,12 @@ const refreshTokensCheck = async (incomingRefreshToken) => {
 };
 
 const sendForgotPasswordEmail = async (email) => {
-  const user = await Admin.findOne({ email });
+  const user = await User.findOne({ email });
 
   // If there is a user with this email the create a random 6 digit code and send the mail to the user using nodemailer
   if (user) {
     const code = Math.floor(100000 + Math.random() * 900000);
-    user.resetPasswordCode = code;
+    user.forgotPasswordCode = code;
     await user.save();
     // set a validity to the code
     const forgotPasswordCodeExpiry = new Date();
@@ -116,7 +116,7 @@ const verifyForgotPasswordCodeAndResetPassword = async (
   code,
   password
 ) => {
-  const user = await Admin.findOne({ email });
+  const user = await User.findOne({ email });
   if (!user) {
     throw new ApiError(404, "User not found");
   }
@@ -137,7 +137,7 @@ const verifyForgotPasswordCodeAndResetPassword = async (
     throw new ApiError(400, "Password must be less than 20 characters");
   }
   user.password = password;
-  user.resetPasswordCode = undefined;
+  user.forgotPasswordCode = undefined;
   user.forgotPasswordCodeExpiry = undefined;
   await user.save();
   return user;
@@ -155,15 +155,20 @@ const resetPasswordService = async (req) => {
   return user;
 };
 
-const updateAdminProfileService = async (
+const updateSellerProfileService = async (
   user,
-  { username, address, phone }
+  { username, address, phone, gst, pan, tin, website, aadhar }
 ) => {
   // A simple object to map the input parameters to the user's schema fields.
   const fieldsToUpdate = {
     username,
     address,
     phone,
+    gst,
+    pan,
+    tin,
+    website,
+    aadhar,
   };
 
   // Iterate over the provided fields and update the user object
@@ -183,7 +188,7 @@ const updateAdminProfileService = async (
   return user;
 };
 
-const updateAdminAvatarService = async (user, avatarLocalPath) => {
+const updateSellerAvatarService = async (user, avatarLocalPath) => {
   if (!user) {
     throw new ApiError(400, "User not found");
   }
@@ -192,7 +197,7 @@ const updateAdminAvatarService = async (user, avatarLocalPath) => {
     throw new ApiError(400, "Error while while uploading avatar");
   }
 
-  const updatedUser = await Admin.findByIdAndUpdate(
+  const updatedUser = await Seller.findByIdAndUpdate(
     req.user?._id,
     {
       $set: {
@@ -206,13 +211,13 @@ const updateAdminAvatarService = async (user, avatarLocalPath) => {
 };
 
 export {
-  registerAdminService,
-  loginAdminService,
-  logoutAdminService,
+  registerSellerService,
+  loginSellerService,
+  logoutSellerService,
   refreshTokensCheck,
   sendForgotPasswordEmail,
   verifyForgotPasswordCodeAndResetPassword,
   resetPasswordService,
-  updateAdminProfileService,
-  updateAdminAvatarService,
+  updateSellerProfileService,
+  updateSellerAvatarService,
 };

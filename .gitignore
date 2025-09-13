@@ -11,3 +11,5 @@ npm-debug.log
 npm-debug.log.perf
 
 package-lock.json
+.idea
+package.lock.json

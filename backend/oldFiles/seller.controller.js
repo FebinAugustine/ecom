@@ -13,7 +13,7 @@ import {
   resetPasswordService,
   updateSellerProfileService,
   updateSellerAvatarService,
-} from "../services/seller.service.js";
+} from "./seller.service.js";
 import jwt from "jsonwebtoken";
 
 const registerSeller = asyncHandler(async (req, res) => {

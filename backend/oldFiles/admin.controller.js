@@ -13,7 +13,7 @@ import {
   resetPasswordService,
   updateAdminProfileService,
   updateAdminAvatarService,
-} from "../services/admin.service.js";
+} from "./admin.service.js";
 import jwt from "jsonwebtoken";
 
 const registerAdmin = asyncHandler(async (req, res) => {
