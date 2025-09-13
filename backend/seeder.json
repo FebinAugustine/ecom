@@ -1,0 +1,269 @@
+{
+  "categories": [
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5b1",
+      "name": "Electronics",
+      "description": "Gadgets and devices"
+    },
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5b2",
+      "name": "Books",
+      "description": "Printed and digital books"
+    },
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5b3",
+      "name": "Clothing",
+      "description": "Apparel and accessories"
+    }
+  ],
+  "users": [
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5a1",
+      "username": "admin_one",
+      "email": "admin1@example.com",
+      "password": "$2a$10$roqFX2yJX/7oz7sCKC8JTuOBWI8DyKzoH91FSQU9o7UwZYeOqibMW",
+      "role": "ADMIN",
+      "isEmailVerified": true,
+      "isActive": true,
+      "cart": [],
+      "wishlist": []
+    },
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5a2",
+      "username": "admin_two",
+      "email": "admin2@example.com",
+      "password": "$2a$10$roqFX2yJX/7oz7sCKC8JTuOBWI8DyKzoH91FSQU9o7UwZYeOqibMW",
+      "role": "ADMIN",
+      "isEmailVerified": true,
+      "isActive": true,
+      "cart": [],
+      "wishlist": []
+    },
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5c1",
+      "username": "seller_one",
+      "email": "seller1@example.com",
+      "password": "$2a$10$roqFX2yJX/7oz7sCKC8JTuOBWI8DyKzoH91FSQU9o7UwZYeOqibMW",
+      "role": "SELLER",
+      "companyName": "Gadget Galaxy",
+      "isEmailVerified": true,
+      "isActive": true,
+      "cart": [],
+      "wishlist": []
+    },
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5c2",
+      "username": "seller_two",
+      "email": "seller2@example.com",
+      "password": "$2a$10$roqFX2yJX/7oz7sCKC8JTuOBWI8DyKzoH91FSQU9o7UwZYeOqibMW",
+      "role": "SELLER",
+      "companyName": "Book Nook",
+      "isEmailVerified": true,
+      "isActive": true,
+      "cart": [],
+      "wishlist": []
+    },
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5c3",
+      "username": "seller_three",
+      "email": "seller3@example.com",
+      "password": "$2a$10$roqFX2yJX/7oz7sCKC8JTuOBWI8DyKzoH91FSQU9o7UwZYeOqibMW",
+      "role": "SELLER",
+      "companyName": "Fashion Forward",
+      "isEmailVerified": true,
+      "isActive": true,
+      "cart": [],
+      "wishlist": []
+    },
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5c4",
+      "username": "seller_four",
+      "email": "seller4@example.com",
+      "password": "$2a$10$roqFX2yJX/7oz7sCKC8JTuOBWI8DyKzoH91FSQU9o7UwZYeOqibMW",
+      "role": "SELLER",
+      "companyName": "Tech Treasures",
+      "isEmailVerified": true,
+      "isActive": true,
+      "cart": [],
+      "wishlist": []
+    },
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5c5",
+      "username": "seller_five",
+      "email": "seller5@example.com",
+      "password": "$2a$10$roqFX2yJX/7oz7sCKC8JTuOBWI8DyKzoH91FSQU9o7UwZYeOqibMW",
+      "role": "SELLER",
+      "companyName": "Classic Reads",
+      "isEmailVerified": true,
+      "isActive": true,
+      "cart": [],
+      "wishlist": []
+    },
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5d1",
+      "username": "user_one",
+      "email": "user1@example.com",
+      "password": "$2a$10$roqFX2yJX/7oz7sCKC8JTuOBWI8DyKzoH91FSQU9o7UwZYeOqibMW",
+      "role": "USER",
+      "isEmailVerified": true,
+      "isActive": true,
+      "cart": [{ "product": "60d5ecb3e7a5e4a3e8d6b5f1", "quantity": 1 }],
+      "wishlist": []
+    },
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5d2",
+      "username": "user_two",
+      "email": "user2@example.com",
+      "password": "$2a$10$roqFX2yJX/7oz7sCKC8JTuOBWI8DyKzoH91FSQU9o7UwZYeOqibMW",
+      "role": "USER",
+      "isEmailVerified": true,
+      "isActive": true,
+      "wishlist": ["60d5ecb3e7a5e4a3e8d6b5f2"],
+      "cart": []
+    },
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5d3",
+      "username": "user_three",
+      "email": "user3@example.com",
+      "password": "$2a$10$roqFX2yJX/7oz7sCKC8JTuOBWI8DyKzoH91FSQU9o7UwZYeOqibMW",
+      "role": "USER",
+      "isEmailVerified": true,
+      "isActive": true,
+      "cart": [],
+      "wishlist": []
+    },
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5d4",
+      "username": "user_four",
+      "email": "user4@example.com",
+      "password": "$2a$10$roqFX2yJX/7oz7sCKC8JTuOBWI8DyKzoH91FSQU9o7UwZYeOqibMW",
+      "role": "USER",
+      "isEmailVerified": true,
+      "isActive": true,
+      "cart": [],
+      "wishlist": []
+    },
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5d5",
+      "username": "user_five",
+      "email": "user5@example.com",
+      "password": "$2a$10$roqFX2yJX/7oz7sCKC8JTuOBWI8DyKzoH91FSQU9o7UwZYeOqibMW",
+      "role": "USER",
+      "isEmailVerified": true,
+      "isActive": true,
+      "cart": [],
+      "wishlist": []
+    },
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5d6",
+      "username": "user_six",
+      "email": "user6@example.com",
+      "password": "$2a$10$roqFX2yJX/7oz7sCKC8JTuOBWI8DyKzoH91FSQU9o7UwZYeOqibMW",
+      "role": "USER",
+      "isEmailVerified": true,
+      "isActive": true,
+      "cart": [],
+      "wishlist": []
+    },
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5d7",
+      "username": "user_seven",
+      "email": "user7@example.com",
+      "password": "$2a$10$roqFX2yJX/7oz7sCKC8JTuOBWI8DyKzoH91FSQU9o7UwZYeOqibMW",
+      "role": "USER",
+      "isEmailVerified": true,
+      "isActive": true,
+      "cart": [],
+      "wishlist": []
+    },
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5d8",
+      "username": "user_eight",
+      "email": "user8@example.com",
+      "password": "$2a$10$roqFX2yJX/7oz7sCKC8JTuOBWI8DyKzoH91FSQU9o7UwZYeOqibMW",
+      "role": "USER",
+      "isEmailVerified": true,
+      "isActive": true,
+      "cart": [],
+      "wishlist": []
+    },
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5d9",
+      "username": "user_nine",
+      "email": "user9@example.com",
+      "password": "$2a$10$roqFX2yJX/7oz7sCKC8JTuOBWI8DyKzoH91FSQU9o7UwZYeOqibMW",
+      "role": "USER",
+      "isEmailVerified": true,
+      "isActive": true,
+      "cart": [],
+      "wishlist": []
+    },
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5da",
+      "username": "user_ten",
+      "email": "user10@example.com",
+      "password": "$2a$10$roqFX2yJX/7oz7sCKC8JTuOBWI8DyKzoH91FSQU9o7UwZYeOqibMW",
+      "role": "USER",
+      "isEmailVerified": true,
+      "isActive": true,
+      "cart": [],
+      "wishlist": []
+    }
+  ],
+  "products": [
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5f1",
+      "name": "Wireless Mouse",
+      "description": "A high-precision wireless mouse.",
+      "price": 25.99,
+      "category": "60d5ecb3e7a5e4a3e8d6b5b1",
+      "stock": 150,
+      "images": ["https://i.dummyjson.com/data/products/8/thumbnail.jpg"],
+      "seller": "60d5ecb3e7a5e4a3e8d6b5c1",
+      "reviews": [
+        {
+          "user": "60d5ecb3e7a5e4a3e8d6b5d1",
+          "rating": 5,
+          "comment": "Excellent mouse!"
+        }
+      ],
+      "likes": ["60d5ecb3e7a5e4a3e8d6b5d1"]
+    },
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5f2",
+      "name": "The Great Gatsby",
+      "description": "A classic novel by F. Scott Fitzgerald.",
+      "price": 10.99,
+      "category": "60d5ecb3e7a5e4a3e8d6b5b2",
+      "stock": 200,
+      "images": ["https://i.dummyjson.com/data/products/49/thumbnail.jpg"],
+      "seller": "60d5ecb3e7a5e4a3e8d6b5c2",
+      "reviews": [],
+      "likes": []
+    },
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5f3",
+      "name": "T-Shirt",
+      "description": "A comfortable cotton t-shirt.",
+      "price": 15.0,
+      "category": "60d5ecb3e7a5e4a3e8d6b5b3",
+      "stock": 300,
+      "images": ["https://i.dummyjson.com/data/products/52/thumbnail.jpg"],
+      "seller": "60d5ecb3e7a5e4a3e8d6b5c3",
+      "reviews": [],
+      "likes": []
+    }
+  ],
+  "orders": [
+    {
+      "_id": "60d5ecb3e7a5e4a3e8d6b5e1",
+      "user": "60d5ecb3e7a5e4a3e8d6b5d2",
+      "products": [
+        { "product": "60d5ecb3e7a5e4a3e8d6b5f1", "quantity": 1, "price": 25.99 }
+      ],
+      "totalAmount": 25.99,
+      "shippingAddress": "123 Main St, Anytown, USA",
+      "status": "Delivered"
+    }
+  ]
+}

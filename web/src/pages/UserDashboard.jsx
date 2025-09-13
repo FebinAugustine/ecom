@@ -10,23 +10,22 @@ const UserDashboard = () => {
       <p className="text-center text-gray-600 dark:text-gray-400 mt-2">This is your personal dashboard. From here, you can manage your profile and view your activity.</p>
 
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
-        {/* Profile Card */}
-        <Link to="/profile" className="block p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md hover:bg-gray-100 dark:hover:bg-gray-700">
+        {/* THE FIX: Updated link to be role-specific */}
+        <Link to="/user/profile" className="block p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md hover:bg-gray-100 dark:hover:bg-gray-700">
           <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Manage Profile</h5>
           <p className="font-normal text-gray-700 dark:text-gray-400">Update your personal information, address, and profile picture.</p>
         </Link>
 
-        {/* Reset Password Card */}
-        <Link to="/reset-password" className="block p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md hover:bg-gray-100 dark:hover:bg-gray-700">
+        {/* THE FIX: Updated link to be role-specific */}
+        <Link to="/user/reset-password" className="block p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md hover:bg-gray-100 dark:hover:bg-gray-700">
           <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Reset Password</h5>
           <p className="font-normal text-gray-700 dark:text-gray-400">Change your current password to a new one.</p>
         </Link>
 
-        {/* Order History Placeholder Card */}
-        <div className="block p-6 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md cursor-not-allowed">
-          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-400 dark:text-gray-500">Order History</h5>
-          <p className="font-normal text-gray-500 dark:text-gray-600">View your past orders and track current shipments (Coming Soon).</p>
-        </div>
+        <Link to="/orders" className="block p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md hover:bg-gray-100 dark:hover:bg-gray-700">
+          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Order History</h5>
+          <p className="font-normal text-gray-700 dark:text-gray-400">View your past orders and track current shipments.</p>
+        </Link>
       </div>
     </div>
   );

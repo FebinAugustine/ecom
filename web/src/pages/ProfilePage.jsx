@@ -4,7 +4,7 @@ import useAuthStore from '../state/useAuthStore';
 import ProfileUpdateForm from '../components/ProfileUpdateForm';
 import AvatarUpdateForm from '../components/AvatarUpdateForm';
 import DeleteAccount from '../components/DeleteAccount';
-import { updateUserProfile, updateUserAvatar, deleteAccount } from '../apis/user.api.js';
+import { updateUserProfile, updateUserAvatar, deleteAccount, getCurrentUser } from '../apis/user.api.js';
 import { useNotify } from '../hooks/useNotify';
 
 const ProfilePage = () => {
@@ -12,7 +12,6 @@ const ProfilePage = () => {
   const navigate = useNavigate();
   const { notifySuccess, notifyError } = useNotify();
 
-  // Loading states for different forms
   const [isInfoLoading, setIsInfoLoading] = useState(false);
   const [isAvatarLoading, setIsAvatarLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -21,14 +20,23 @@ const ProfilePage = () => {
     return <p className="text-center">Loading user data...</p>;
   }
 
+  const refetchUser = async () => {
+    try {
+      const response = await getCurrentUser();
+      if (response.data) {
+        setUser(response.data);
+      }
+    } catch (error) {
+      notifyError("Could not refresh user data.");
+    }
+  };
+
   const handleUpdateProfile = async (formData) => {
     setIsInfoLoading(true);
     try {
-      const response = await updateUserProfile(formData);
-      if (response.data) {
-        setUser(response.data);
-        notifySuccess('Profile updated successfully!');
-      }
+      await updateUserProfile(formData);
+      await refetchUser();
+      notifySuccess('Profile updated successfully!');
     } catch (err) {
       notifyError(err.message || 'Failed to update profile.');
     } finally {
@@ -39,11 +47,9 @@ const ProfilePage = () => {
   const handleUpdateAvatar = async (formData) => {
     setIsAvatarLoading(true);
     try {
-      const response = await updateUserAvatar(formData);
-      if (response.data) {
-        setUser(response.data);
-        notifySuccess('Avatar updated successfully!');
-      }
+      await updateUserAvatar(formData);
+      await refetchUser();
+      notifySuccess('Avatar updated successfully!');
     } catch (err) {
       notifyError(err.message || 'Failed to update avatar.');
     } finally {
@@ -110,6 +116,14 @@ const ProfilePage = () => {
                 <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">GST Number</dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-gray-100">{user.gst || 'Not provided'}</dd>
               </div>
+              <div className="sm:col-span-1">
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">PAN Number</dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-gray-100">{user.pan || 'Not provided'}</dd>
+              </div>
+              <div className="sm:col-span-1">
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Aadhar Number</dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-gray-100">{user.aadhar || 'Not provided'}</dd>
+              </div>
             </dl>
           </div>
         )}
@@ -121,15 +135,13 @@ const ProfilePage = () => {
           <h2 className="text-xl font-bold text-center mb-4">Update Your Information</h2>
           <ProfileUpdateForm user={user} onSubmit={handleUpdateProfile} isLoading={isInfoLoading} />
         </div>
-        <div>
-          <h2 className="text-xl font-bold text-center mb-4">Update Your Avatar</h2>
-          <AvatarUpdateForm onSubmit={handleUpdateAvatar} isLoading={isAvatarLoading} />
+        <div className="space-y-8">
+          <div>
+            <h2 className="text-xl font-bold text-center mb-4">Update Your Avatar</h2>
+            <AvatarUpdateForm onSubmit={handleUpdateAvatar} isLoading={isAvatarLoading} />
+          </div>
+          <DeleteAccount onConfirm={handleDeleteAccount} isLoading={isDeleting} />
         </div>
-      </div>
-
-      {/* Delete Account Section */}
-      <div className="mt-8">
-        <DeleteAccount onConfirm={handleDeleteAccount} isLoading={isDeleting} />
       </div>
     </div>
   );

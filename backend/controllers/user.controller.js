@@ -4,23 +4,22 @@ import {
   updateUserProfileService,
   updateUserAvatarService,
   deleteAccountService,
+  toggleWishlistService,
+  manageCartService,
+  getCartService
 } from "../services/user.service.js";
 import ApiError from "../utils/ApiErrors.js";
 import redis from "../config/redis.js";
 
 const updateProfile = asyncHandler(async (req, res) => {
-  const { username, address, phone } = req.body;
+  const userId = req.user._id; // Get the user ID from the authenticated user
+  const updateData = req.body; // Get the update data from the request body
 
-  const user = req.user;
-
-  const updatedUser = await updateUserProfileService(user, {
-    username,
-    address,
-    phone,
-  });
+  // Call the service with the correct arguments: userId and updateData
+  const updatedUser = await updateUserProfileService(userId, updateData);
 
   // Invalidate cache
-  await redis.del(`user:${user._id}`);
+  await redis.del(`user:${userId}`);
 
   return res
     .status(200)
@@ -76,9 +75,49 @@ const deleteAccount = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, {}, "Account deleted successfully"));
 });
 
+const toggleWishlist = asyncHandler(async (req, res) => {
+    const { productId } = req.body;
+    const userId = req.user._id;
+
+    const updatedUser = await toggleWishlistService(userId, productId);
+
+    // Invalidate cache
+    await redis.del(`user:${userId}`);
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, updatedUser, "Wishlist updated successfully"));
+});
+
+const manageCart = asyncHandler(async (req, res) => {
+    const { productId, quantity } = req.body;
+    const userId = req.user._id;
+
+    const updatedUser = await manageCartService(userId, productId, quantity);
+
+    // Invalidate cache
+    await redis.del(`user:${userId}`);
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, updatedUser, "Cart updated successfully"));
+});
+
+const getCart = asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+    const cart = await getCartService(userId);
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, cart, "Cart retrieved successfully"));
+});
+
 export {
   updateProfile,
   updateUserAvatar,
   googleAuthCallback,
   deleteAccount,
+  toggleWishlist,
+  manageCart,
+  getCart,
 };

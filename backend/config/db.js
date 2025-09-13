@@ -1,8 +1,8 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(`${process.env.MONGODB_URI}/ecom`, {
+    const conn = await mongoose.connect(`${process.env.MONGODB_URI}/ecomdb`, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

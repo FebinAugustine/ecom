@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import RegisterForm from '../components/RegisterForm';
+import GoogleLoginButton from '../components/GoogleLoginButton'; // Import the button
 import { register } from '../apis/auth.api.js';
 import { useNotify } from '../hooks/useNotify';
 
@@ -32,10 +33,23 @@ const RegisterPage = () => {
             <p>Thank you for registering! A verification link has been sent to your email.</p>
           </div>
         ) : (
-          <RegisterForm onSubmit={handleRegister} isLoading={isLoading} />
+          <>
+            <RegisterForm onSubmit={handleRegister} isLoading={isLoading} />
+            <div className="mt-6">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300 dark:border-gray-600" />
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-gray-50 dark:bg-gray-900 text-gray-500 dark:text-gray-400">Or sign up with</span>
+                </div>
+              </div>
+              <div className="mt-6">
+                <GoogleLoginButton />
+              </div>
+            </div>
+          </>
         )}
-
-        {/* Inline error and success messages are now replaced by toast notifications */}
       </div>
     </div>
   );

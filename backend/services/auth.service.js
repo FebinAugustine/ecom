@@ -76,6 +76,11 @@ const loginService = async (req) => {
     throw new ApiError(400, "User not found");
   }
 
+  // Enforce account is active
+  if (!user.isActive) {
+    throw new ApiError(403, "Your account has been disabled. Please contact support.");
+  }
+
   // Enforce email verification for users and sellers
   if ((user.role === 'USER' || user.role === 'SELLER') && !user.isEmailVerified) {
     throw new ApiError(401, "Must verify to login");

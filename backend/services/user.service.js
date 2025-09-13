@@ -1,22 +1,39 @@
 import User from "../models/user.model.js";
+import { Product } from "../models/product.model.js";
 import ApiError from "../utils/ApiErrors.js";
 import {
   uploadOnCloudinary,
   deleteImageFromCloudinary,
 } from "../utils/cloudinary.fileuplaod.js";
 
-const updateUserProfileService = async (user, { username, address, phone }) => {
-  const fieldsToUpdate = { username, address, phone };
+const updateUserProfileService = async (userId, updateData) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
 
-  Object.keys(fieldsToUpdate).forEach((key) => {
-    const newValue = fieldsToUpdate[key];
-    if (newValue !== undefined && newValue !== null) {
-      user[key] = newValue;
-    }
-  });
+  // Build the update object with only the fields that are present in the request
+  const updateFields = {};
+  if (updateData.username !== undefined) updateFields.username = updateData.username;
+  if (updateData.address !== undefined) updateFields.address = updateData.address;
+  if (updateData.phone !== undefined) updateFields.phone = updateData.phone;
 
-  await user.save();
-  return user;
+  // If the user is a seller, add seller-specific fields to the update object
+  if (user.role === 'SELLER') {
+    if (updateData.companyName !== undefined) updateFields.companyName = updateData.companyName;
+    if (updateData.gst !== undefined) updateFields.gst = updateData.gst;
+    if (updateData.pan !== undefined) updateFields.pan = updateData.pan;
+    if (updateData.aadhar !== undefined) updateFields.aadhar = updateData.aadhar;
+    if (updateData.website !== undefined) updateFields.website = updateData.website;
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    userId,
+    { $set: updateFields },
+    { new: true, runValidators: true }
+  );
+
+  return updatedUser;
 };
 
 const updateUserAvatarService = async (user, avatarLocalPath) => {
@@ -29,7 +46,6 @@ const updateUserAvatarService = async (user, avatarLocalPath) => {
     throw new ApiError(400, "Error while uploading avatar");
   }
 
-  // If user already has an avatar, delete the old one
   if (user.avatar) {
     try {
       const urlParts = user.avatar.split('/');
@@ -48,16 +64,13 @@ const updateUserAvatarService = async (user, avatarLocalPath) => {
 };
 
 const deleteAccountService = async (userId) => {
-  // 1. Find the user first, don't delete yet
   const user = await User.findById(userId);
   if (!user) {
     throw new ApiError(404, "User not found");
   }
 
-  // 2. If user has an avatar, delete it from Cloudinary
   if (user.avatar) {
     try {
-      // Extract public_id from the URL
       const urlParts = user.avatar.split('/');
       const uploadIndex = urlParts.indexOf('upload');
       if (uploadIndex !== -1 && urlParts.length > uploadIndex + 2) {
@@ -66,19 +79,90 @@ const deleteAccountService = async (userId) => {
         await deleteImageFromCloudinary(publicId);
       }
     } catch (cloudinaryError) {
-      // Log the error but don't block user deletion
       console.error("Cloudinary avatar deletion failed:", cloudinaryError);
     }
   }
 
-  // 3. Now, delete the user from the database
   await User.findByIdAndDelete(userId);
 
   return user;
+};
+
+const toggleWishlistService = async (userId, productId) => {
+  const product = await Product.findById(productId);
+  if (!product) {
+    throw new ApiError(404, "Product not found");
+  }
+
+  const user = await User.findById(userId);
+  const productIndex = user.wishlist.indexOf(productId);
+
+  if (productIndex >= 0) {
+    user.wishlist.splice(productIndex, 1);
+  } else {
+    user.wishlist.push(productId);
+  }
+
+  await user.save();
+  
+  const updatedUser = await User.findById(userId).populate('wishlist');
+  return updatedUser;
+};
+
+const manageCartService = async (userId, productId, quantity) => {
+  const product = await Product.findById(productId);
+  if (!product) {
+    throw new ApiError(404, "Product not found");
+  }
+  if (quantity > product.stock) {
+    throw new ApiError(400, `Not enough stock. Only ${product.stock} items available.`);
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+      throw new ApiError(404, "User not found");
+  }
+
+  const cartItemIndex = user.cart.findIndex(
+    (item) => item.product.toString() === productId.toString()
+  );
+
+  if (cartItemIndex >= 0) {
+    if (quantity > 0) {
+      user.cart[cartItemIndex].quantity = quantity;
+    } else {
+      user.cart.splice(cartItemIndex, 1);
+    }
+  } else {
+    if (quantity > 0) {
+      user.cart.push({ product: productId, quantity });
+    }
+  }
+
+  await user.save();
+  
+  const updatedUser = await User.findById(userId).populate('cart.product');
+  return updatedUser;
+};
+
+const getCartService = async (userId) => {
+  const user = await User.findById(userId).populate({
+    path: 'cart.product',
+    select: 'name price images stock',
+  });
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  return user.cart;
 };
 
 export {
   updateUserProfileService,
   updateUserAvatarService,
   deleteAccountService,
+  toggleWishlistService,
+  manageCartService,
+  getCartService,
 };

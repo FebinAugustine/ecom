@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import mongooseAggregatePaginate from 'mongoose-aggregate-paginate-v2'; // Import the plugin
 
 const userSchema = new mongoose.Schema(
   {
@@ -49,6 +50,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isActive: { // New field to manage account status
+      type: Boolean,
+      default: true,
+    },
     forgotPasswordCode: {
       type: String,
       select: false,
@@ -80,8 +85,17 @@ const userSchema = new mongoose.Schema(
     ],
     cart: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Product',
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+          min: 1,
+          default: 1,
+        },
       },
     ],
     // Seller-specific fields
@@ -173,7 +187,7 @@ userSchema.methods.toJSON = function() {
   delete userObject.emailVerificationToken;
   delete userObject.emailVerificationExpiry;
 
-  // Remove role-specific fields
+  // Conditionally remove role-specific fields
   if (userObject.role !== 'ADMIN') {
     delete userObject.users;
   }
@@ -188,13 +202,11 @@ userSchema.methods.toJSON = function() {
     delete userObject.products;
   }
 
-  if (userObject.role !== 'USER') {
-    delete userObject.wishlist;
-    delete userObject.cart;
-  }
-
   return userObject;
 }
+
+// Apply the pagination plugin
+userSchema.plugin(mongooseAggregatePaginate);
 
 const User = mongoose.model("User", userSchema);
 
